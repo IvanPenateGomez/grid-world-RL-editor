@@ -1,0 +1,161 @@
+\documentclass{report} 
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc} % Encoding
+\title{Research Document}
+\author{Iván Peñate Gómez}
+\date{\today}
+
+\begin{document} 
+
+\maketitle
+
+\chapter{Sources and notes}
+
+\section{Intro to RL in gridworld with Medium}
+\href{https://medium.com/@physynapse/understanding-reinforcement-learning-through-gridworld-from-bellman-equations-to-optimal-policies-5689be17540f#id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6ImIzZDk1Yjk1ZmE0OGQxODBiODVmZmU4MDgyZmNmYTIxNzRiMDQ2NjciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDM4NTYwNDMxMDQyMDAyNTYyMDAiLCJlbWFpbCI6ImdhZ3JlaXZhbjE5MTBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5vbmNlIjoibm90X3Byb3ZpZGVkIiwibmJmIjoxNzc2MzU3NTMxLCJuYW1lIjoiSXbDoW4gUGXDsWF0ZSBHw7NtZXoiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSTBOSkVraDJJbndxbGJLYzl0ZUlYWVZUMG83dHlTS3RZQzVCTlhpMmlPOVh2UmdJWWlsZz1zOTYtYyIsImdpdmVuX25hbWUiOiJJdsOhbiIsImZhbWlseV9uYW1lIjoiUGXDsWF0ZSBHw7NtZXoiLCJpYXQiOjE3NzYzNTc4MzEsImV4cCI6MTc3NjM2MTQzMSwianRpIjoiNTMwMmIzNDdlOGRmNjU3ZTFjMzI1NTgxYzFkOTIyYTdkYzcyYWJjMiJ9.UuDwqPkEzkBH3FbFaLUQH4HsI6zL4BduSDKTxJlhDaMGu5UTe1YzMaTH-cU4Vw_pECnxNiq9U64uoSIaSG1ZYamS83TAoTKHrP8Tgo-KTKmHMThVibQaPPHaRGy1yz6BNps8XW1au6Rs9cFsPUAi3RIwdEM7Tg73TxGXhhY-HTH4t1PqCYWOLn272W6EkAj6bGM9ZjDBxECYO4O43D1DvwPlJZTDgVQe5RDCts-8w-xZW67_ukb31vpEzuh4jHEoCqDb2mtc35C2g5tkPsB_zgy1qVjQukP7W__eDZTsSwjYvGkVBra2GMXY4jgxlKPg28QNhYSfFYu7v7afcpV8DQ}{Medium, understanding RL in grid worlds}
+
+\subsection{Notes}
+
+Markov Decision Processes (MDPs)
+
+\textbf{Situations that are simulated} AI playing chess, robot in warehouse, trading algorithm.
+
+\textbf{Environment} The rules of the game, physics, reward function and everything out of agents control
+
+\textbf{Action space} any legal move, buy or sell, N S E W. 
+
+\textbf{State Space} Position, orientation, board configuration
+
+\subsubsection{Rewards}
+Positive, negative and neutral. Assigned by the environment, not chosen by the agent. 
+
+\[
+G_t = r_r + \gamma^1r_{t+1} + \gamma^2r_{t+2} + \cdots
+\]
+where $G_t$ is the total return from time t onward, $\gamma$ is the discount factor $0\leq\gamma\leq1$, so future rewards are discounted, €$1$ tomorrow is less than value of today.
+
+\subsection{Bellman equation}
+Calculated the value of a specific state. The value of a state is not only the immediate rewards but the expected one. 
+
+\[
+V^\pi(s) = \sum_a{\pi(a|s) \sum_{s',r}{p(s',r|s,a)}}[r+\gamma V^\pi(s')]
+\]
+
+where:
+\begin{itemize}
+    \item \textbf{Value of the given state $V^\pi(s)$} is the value of the state $s$ under policy, representing the expected cumulative discounted reward starting from $s$ following policy $\pi$
+    \item \textbf{Policy probability $\pi(a|s)$}: probability of taking action $a$ in state $s$. For a deterministic policy it would be $1.0$, and all others $0$, for s stochastic policy, the probability is distributed over all actions
+    \item \textbf{Environment dynamics $p(s',r|s,a)$}: is the probability of reaching state $s'$ and receiving reward $r$ given the state $s$ and action $a$ is taken, capturing the environment rules
+    \item \textbf{Immediate reward $r$}: is what we get for this transition, can be either positive, negative or neutral reward.
+    \item \textbf{Discount factor $(0\leq\gamma\leq1)$}: How much we value the future rewards vs immediate ones, so $\gamma = 0.9$ means a reward tomorrow is worth $90\%$ of current value, ensuring inf sum convergence.
+    \item \textbf{Future Value $V^\pi(s')$}: value of the next state we land, creating a recursive relationship. 
+\end{itemize}
+
+\section{JANI}
+
+\subsection{Summary}
+
+JANI (which stands for \textbf{J}ANI \textbf{A}Iso \textbf{N}otation \textbf{I}nterchange, though the name itself is not an acronym) is a standardized exchange format and tool interaction protocol for quantitative models \cite{BuddeDHHJT17}. The JANI specification consists of two main components: \texttt{jani-model}, a JSON-based model interchange format for representing networks of communicating automata, and \texttt{jani-interaction}, a tool interaction and automation protocol (currently without tool support and may be deprecated).
+
+The formal analysis of critical systems is supported by a vast space of modelling formalisms and tools. The variety of incompatible formats and tools poses a significant challenge to practical adoption as well as continued research \cite{BuddeDHHJT17}. JANI provides a unified interface between tools such as model checkers, transformers, and user interfaces.
+
+\subsection{Core Design Principles}
+
+According to Budde et al. \cite{BuddeDHHJT17}, the JANI format is built on three key principles:
+
+\begin{enumerate}
+    \item \textbf{JSON-based:} Uses the JSON data format, inheriting its ease of use, wide library support, and inherent extensibility.
+    \item \textbf{Network of communicating automata:} Models are constructed as parallel compositions of automata with variables.
+    \item \textbf{Ease of implementation:} Designed specifically so that tool developers can implement support without excessive effort, while maintaining human readability.
+\end{enumerate}
+
+\subsection{Model Types}
+
+JANI initially targets, but is not limited to, quantitative model checking \cite{BuddeDHHJT17}. It can represent:
+
+\begin{itemize}
+    \item Standard labelled transition systems
+    \item Kripke structures
+    \item Discrete-Time Markov Chains (DTMCs)
+    \item Markov Decision Processes (MDPs)
+    \item Continuous-Time Markov Chains (CTMCs)
+    \item Markov Automata (MAs)
+\end{itemize}
+
+By providing discrete variables and a parallel composition operation, models with large or even infinite state spaces can be represented succinctly \cite{BuddeDHHJT17}.
+
+\subsection{Property Specification}
+
+JANI allows the specification of qualitative and quantitative properties for verification within a model \cite{BuddeDHHJT17}. This includes support for temporal logics such as:
+
+\begin{itemize}
+    \item Probabilistic Computation Tree Logic (PCTL)
+    \item Continuous Stochastic Logic (CSL)
+\end{itemize}
+
+\subsection{Tool Support}
+
+Several existing tools now support the verification of JANI models \cite{jani-spec}:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Tool} & \textbf{JANI Support} \\
+\hline
+Storm & Input: GSPN, pGCL, PRISM language → JANI. Extensions: derived-operators, named-expressions \\
+\hline
+The Modest Toolset & Input/Output: Modest $\leftrightarrow$ JANI. Extensions: arrays, datatypes, functions, nondet-selection \\
+\hline
+ePMC (formerly IscasMC) & Input/Output: PRISM language $\leftrightarrow$ JANI \\
+\hline
+FIG & Input/Output: IOSA $\leftrightarrow$ JANI \\
+\hline
+\end{tabular}
+\caption{JANI support in existing verification tools \cite{jani-spec}}
+\label{tab:jani-tools}
+\end{table}
+
+For testing JANI exports, model libraries are available including the Quantitative Verification Benchmark Set (QVBS) with more than 75 quantitative models in JANI format with reference results, the IMITATOR benchmarks library, and the original JANI Model Library \cite{jani-spec}.
+
+\subsection{Extensibility}
+
+The format is designed to be inherently extensible \cite{BuddeDHHJT17}. This means features can be added without breaking existing tools—older tools ignore extensions they do not understand, while newer tools can leverage them.
+
+\subsection{Ultimate Purpose}
+
+From Budde et al. \cite{BuddeDHHJT17}: \textit{"The ultimate purpose of JANI is to simplify tool development, encourage research cooperation, and pave the way towards a future competition in quantitative model checking."}
+
+\subsection{Key Information from the Full Chapter}
+
+For the purposes of this thesis (implementing a grid-world editor that exports to JANI), the following elements from the JANI chapter are most relevant:
+
+\begin{itemize}
+    \item \textbf{Variable definitions:} How to encode grid position (x, y coordinates or single location variable)
+    \item \textbf{Automaton structure:} Each robot becomes one automaton
+    \item \textbf{Edge and transition syntax:} How to encode movement actions with guards (e.g., can only move right if $x < \text{max}$)
+    \item \textbf{Property embedding:} How to include temporal logic properties (such as "infinitely often coffee") directly in the JANI file
+    \item \textbf{The metamodel definition:} The precise core concepts (automata, locations, edges, variables, etc.)
+    \item \textbf{The JSON schema specification:} Exactly how each element is represented in JSON
+    \item \textbf{Concrete examples:} JANI model examples to use as templates for export implementation
+\end{itemize}
+
+\subsection{How This Applies to the Thesis}
+
+For this thesis, the editor will export grid-world models to the JANI format. The Storm model checker (or other supported tools) can then read these files directly for verification. The Modest Toolset's \texttt{moconv} tool can perform JANI to JANI conversion to validate the export \cite{jani-spec}. This allows systematic generation of benchmark models and comparison of verification results across different model checkers.
+
+To refer to JANI in scientific publications, please cite the following paper \cite{BuddeDHHJT17}:
+
+\vspace{0.5cm}
+
+Carlos E. Budde, Christian Dehnert, Ernst Moritz Hahn, Arnd Hartmanns, Sebastian Junges and Andrea Turrini: \textit{JANI: Quantitative Model and Tool Interaction.} TACAS (2) 2017: 151-168
+
+\subsection{JANI SPEcification}
+
+\href{https://docs.google.com/document/d/1BDQIzPBtscxJFFlDUEPIo8ivKHgXT8_X6hz5quq7jK0/edit?tab=t.0}{Google docs on how to use }
+
+\href{https://jani-spec.org/}{Overview of Jani specs}
+
+\end{document}
